@@ -33,7 +33,7 @@ The system consists of three roles:
 - Form an anonymous routing network  
 - Forward requests and responses  
 - Handle payment aggregation and distribution  
-![Architecture](./images/architecture.png)
+![Architecture](Gemini_Generated_Image_5hdz425hdz425hdz.png)
 ---
 
 ## 3. Design Goals
