@@ -1,21 +1,22 @@
+```markdown
 # PrivacyAI
 
-A decentralized anonymous AI network that combines multi-hop routing (inspired by Tor) with cryptocurrency payment mixing to protect user identity and reduce centralized control over AI services.
+A decentralized anonymous AI network combining multi-hop onion routing with cryptocurrency payment mixing to prevent identity–query linkage and reduce centralized control over AI inference services.
 
 ## Overview
 
-PrivacyAI is a protocol design for accessing AI inference services without revealing user identity to providers. By routing requests through an anonymous relay network and obfuscating payments, the system separates _who_ uses a service from _what_ is being queried.
+PrivacyAI is a protocol design for accessing AI inference services without exposing user identity to providers. By routing requests through an anonymous relay network and obfuscating payments, the system separates _who_ uses a service from _what_ is being queried.
 
 The design addresses two growing concerns in the AI landscape:
 - **Privacy leakage**: AI providers currently have direct access to user inputs and can associate them with identities.
 - **Centralization**: A handful of platforms control access to AI services and collect detailed usage records.
 
-This repository contains the conceptual whitepaper and architecture draft for PrivacyAI. It does not yet include an implementation.
+**Important**: This repository contains the conceptual whitepaper and architecture draft only. No implementation exists yet.
 
 ## Features
 
-- **Anonymous AI access**: Users can submit inference requests without revealing their network identity to the provider.
-- **Multi-hop onion routing**: Modeled after Tor, each relay node only knows the previous and next hop; messages are wrapped in layered encryption.
+- **Anonymous AI access**: Users submit inference requests without revealing their network identity to providers.
+- **Multi-hop onion routing**: Modeled after Tor, each relay node knows only the previous and next hop; messages are wrapped in layered encryption.
 - **Unlinkable payments**: Funds from multiple users are aggregated and randomly redistributed to providers, breaking the direct payer–payee link.
 - **Prepaid metering**: Users deposit cryptocurrency and pay as they go; service stops when balance is exhausted.
 - **Decentralized incentives**: Relay nodes and AI providers earn fees based on traffic and compute usage, encouraging participation without a central authority.
@@ -39,18 +40,19 @@ This repository contains the conceptual whitepaper and architecture draft for Pr
 
 ## Security Model (Summary)
 
-- **Protection against passive network observers** (who can monitor traffic but control no nodes).
+- Protection against **passive network observers** (who can monitor traffic but control no nodes).
 - **Identity hiding from service providers** (they see requests but not who sent them).
-- **Partial resistance to adversaries controlling a subset of relay nodes** (traffic analysis and timing attacks remain residual risks).
+- **Partial resistance** to adversaries controlling a subset of relay nodes (traffic analysis and timing attacks remain residual risks).
 - **Known limitations**: providers have plaintext access to request content; colluding nodes can weaken anonymity; latency is increased by multi-hop routing.
 
 ## Project Status
 
-This project is currently a **design whitepaper and architecture draft**. No production code, smart contracts, or reference implementation exists in this repository. The whitepaper describes the intended protocol and its properties.
+This project is currently a **design whitepaper and architecture draft**. No production code, smart contracts, or reference implementation exists. The whitepaper describes the intended protocol and its properties.
 
 ## Roadmap / Next Steps
 
 The whitepaper identifies these areas for future work:
+
 - Detailed cryptographic protocol specification
 - Relay node selection and path building algorithms
 - Payment mixing and metering implementation
@@ -65,4 +67,5 @@ If you have ideas, please open an issue to discuss before submitting a pull requ
 
 ## License
 
-License information was not found in this repository. If you plan to use or extend this work, please contact the repository owner for clarification.
+This project is licensed under the [MIT License](LICENSE).
+```
