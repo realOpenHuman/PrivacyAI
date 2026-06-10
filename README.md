@@ -1,211 +1,68 @@
 # PrivacyAI
-Decentralized anonymous AI network using multi-hop routing (inspired by Tor) and mixed crypto payments to unlink users from providers while enabling pay-per-use AI services.
-# Decentralized Anonymous AI Service Network (Whitepaper Draft)
 
-## 1. Introduction
+A decentralized anonymous AI network that combines multi-hop routing (inspired by Tor) with cryptocurrency payment mixing to protect user identity and reduce centralized control over AI services.
 
-As AI services become widely adopted, two key concerns emerge:
+## Overview
 
-1. Privacy risk: AI providers can directly access user inputs  
-2. Centralization: Services are controlled by a small number of platforms  
+PrivacyAI is a protocol design for accessing AI inference services without revealing user identity to providers. By routing requests through an anonymous relay network and obfuscating payments, the system separates _who_ uses a service from _what_ is being queried.
 
-Existing anonymity networks such as Tor provide communication privacy but do not prevent service providers from accessing user data.
+The design addresses two growing concerns in the AI landscape:
+- **Privacy leakage**: AI providers currently have direct access to user inputs and can associate them with identities.
+- **Centralization**: A handful of platforms control access to AI services and collect detailed usage records.
 
-This proposal introduces a decentralized architecture that combines anonymous communication with cryptocurrency-based payments to reduce identity exposure and mitigate centralized control, without changing how AI inference is performed.
+This repository contains the conceptual whitepaper and architecture draft for PrivacyAI. It does not yet include an implementation.
 
----
+## Features
 
-## 2. System Model
+- **Anonymous AI access**: Users can submit inference requests without revealing their network identity to the provider.
+- **Multi-hop onion routing**: Modeled after Tor, each relay node only knows the previous and next hop; messages are wrapped in layered encryption.
+- **Unlinkable payments**: Funds from multiple users are aggregated and randomly redistributed to providers, breaking the direct payer–payee link.
+- **Prepaid metering**: Users deposit cryptocurrency and pay as they go; service stops when balance is exhausted.
+- **Decentralized incentives**: Relay nodes and AI providers earn fees based on traffic and compute usage, encouraging participation without a central authority.
 
-The system consists of three roles:
+## System Roles
 
-### A: User 
-- Sends AI requests  
-- Pays for services  
-- Remains anonymous  
+| Role | Responsibility |
+|------|----------------|
+| **User** | Sends AI requests and pays for services while remaining anonymous. |
+| **AI Provider** | Performs model inference and charges based on usage (tokens or compute). Cannot directly identify users. |
+| **Node Provider** | Forms the anonymous routing network; forwards requests/responses and handles payment aggregation and distribution. |
 
-### B: AI Provider
-- Performs model inference  
-- Charges based on usage (e.g., tokens or compute)  
-- Cannot directly identify users  
+## How It Works (Conceptual)
 
-### C: Node Provider
-- Form an anonymous routing network  
-- Forward requests and responses  
-- Handle payment aggregation and distribution  
-![Architecture](Gemini_Generated_Image_5hdz425hdz425hdz.png)
----
+1. **Path Selection**: The user chooses a sequence of relay nodes.
+2. **Onion Encryption**: The request is wrapped in multiple encryption layers, one for each relay node and the final provider.
+3. **Forwarding**: Each relay strips one encryption layer and forwards the request to the next hop.
+4. **Inference**: The provider decrypts the final layer, processes the request, and encrypts the response.
+5. **Response Return**: The response follows the reverse path, with each node re-encrypting the data.
+6. **Payment**: The payment mixing system collects user deposits and distributes them to providers and relay nodes in a shuffled manner.
 
-## 3. Design Goals
+## Security Model (Summary)
 
-### Core Objectives
+- **Protection against passive network observers** (who can monitor traffic but control no nodes).
+- **Identity hiding from service providers** (they see requests but not who sent them).
+- **Partial resistance to adversaries controlling a subset of relay nodes** (traffic analysis and timing attacks remain residual risks).
+- **Known limitations**: providers have plaintext access to request content; colluding nodes can weaken anonymity; latency is increased by multi-hop routing.
 
-- **Anonymity**: Providers cannot identify users  
-- **Decentralization**: No central authority controls communication or payments  
-- **Unlinkability**: Requests, responses, and payments are difficult to correlate  
-- **Metering**: Supports usage-based billing  
+## Project Status
 
-### Non-Goals
+This project is currently a **design whitepaper and architecture draft**. No production code, smart contracts, or reference implementation exists in this repository. The whitepaper describes the intended protocol and its properties.
 
-- Preventing providers from accessing request content  
-- Full protection against powerful adversaries  
+## Roadmap / Next Steps
 
----
+The whitepaper identifies these areas for future work:
+- Detailed cryptographic protocol specification
+- Relay node selection and path building algorithms
+- Payment mixing and metering implementation
+- Simulation or prototype to evaluate latency, anonymity, and incentive compatibility
+- Threat model refinement and formal security analysis
 
-## 4. Architecture
+## Contributing
 
-### 4.1 Communication Layer
+Contributions to the design, discussion, or future implementation are welcome. As the project is in the conceptual stage, early feedback on the architecture, threat model, and incentive design is especially valuable.
 
-The system uses a multi-hop routing mechanism inspired by Tor:
+If you have ideas, please open an issue to discuss before submitting a pull request.
 
+## License
 
-A → C1 → C2 → C3 → B
-
-
-Properties:
-
-- Each node only knows its immediate neighbors  
-- Messages are wrapped in layered encryption (onion routing)  
-- Paths are dynamically selected by the user  
-
----
-
-### 4.2 Request Flow
-
-1. Path Selection  
-   The user selects a sequence of relay nodes  
-
-2. Encryption  
-   The request is wrapped in multiple encryption layers  
-
-3. Forwarding  
-   The request is relayed through the network  
-
-4. Inference  
-   The provider decrypts the final layer and processes the request  
-
----
-
-### 4.3 Response Flow
-
-Responses follow the reverse path:
-
-
-B → C3 → C2 → C1 → A
-
-
-- Each node re-encrypts the data  
-- The user decrypts layer by layer to obtain the result  
-
----
-
-## 5. Payment Model
-
-### 5.1 Prepaid Balance
-
-- Users deposit cryptocurrency into the system  
-- A balance is maintained for future usage  
-- Service is halted when the balance is insufficient  
-
----
-
-### 5.2 Payment Mixing Mechanism
-
-Payment flow:
-
-
-Multiple Users → Relay Pool → Shuffled Distribution → Multiple Providers
-
-
-Features:
-
-- Aggregation of funds from multiple users  
-- Randomized redistribution  
-- Breaks the direct link between payer and provider  
-
----
-
-### 5.3 Fee Structure
-
-- Providers are paid based on usage  
-- Relay nodes collect routing and processing fees  
-- All fees are deducted from user balances  
-
----
-
-## 6. Security Model
-
-### 6.1 Threat Assumptions
-
-Adversaries include:
-
-1. Passive observers  
-   - Can monitor traffic but do not control nodes  
-
-2. Service providers  
-   - Can access request content  
-   - Cannot directly identify users  
-
-3. Partial network adversaries  
-   - Control a subset of relay nodes  
-   - Perform traffic analysis  
-
----
-
-### 6.2 Security Properties
-
-- **Anonymity**: Multi-hop routing hides user identity  
-- **Payment Unlinkability**: Mixing reduces traceability of payments  
-
----
-
-### 6.3 Residual Risks
-
-- Content-based identification  
-- Timing correlation attacks  
-- Collusion between nodes  
-
----
-
-## 7. Incentive Design
-
-### Relay Nodes
-- Earn fees based on traffic volume  
-
-### AI Providers
-- Earn revenue based on compute usage  
-
-### Users
-- Prepay and consume services as needed  
-
----
-
-## 8. Advantages
-
-Compared to traditional AI services:
-
-- No account registration required  
-- Reduced identity exposure  
-- Decentralized control  
-
-Compared to pure anonymity networks:
-
-- Includes economic incentives  
-- Enables sustainable operation  
-
----
-
-## 9. Limitations
-
-- Providers can access plaintext data  
-- Limited resistance to advanced traffic analysis  
-- Anonymity depends on network size  
-- Additional latency and overhead  
-
----
-
-## 10. Conclusion
-
-This system presents a decentralized architecture for anonymous access to AI services by combining multi-hop routing with mixed cryptocurrency payments.
-
-It improves user anonymity and reduces centralized data control, while acknowledging that it does not provide full data privacy.
+License information was not found in this repository. If you plan to use or extend this work, please contact the repository owner for clarification.
