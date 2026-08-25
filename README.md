@@ -1,4 +1,4 @@
-```markdown
+
 # PrivacyAI
 
 A decentralized anonymous AI network combining multi-hop onion routing with cryptocurrency payment mixing to prevent identity–query linkage and reduce centralized control over AI inference services.
